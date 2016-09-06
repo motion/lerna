@@ -6,7 +6,6 @@ import semver from "semver";
 import async from "async";
 import find from "lodash.find";
 import path from "path";
-import normalize from "normalize-path";
 
 export default class BootstrapCommand extends Command {
   initialize(callback) {
@@ -136,25 +135,7 @@ export default class BootstrapCommand extends Command {
   }
 
   createLinkedDependencyFiles(src, dest, name, callback) {
-    const srcPackageJsonLocation = path.join(src, "package.json");
-    const destPackageJsonLocation = path.join(dest, "package.json");
-    const destIndexJsLocation = path.join(dest, "index.js");
-
-    const packageJsonFileContents = JSON.stringify({
-      name: name,
-      version: require(srcPackageJsonLocation).version
-    }, null, "  ");
-
-    const prefix = this.repository.linkedFiles.prefix || "";
-    const indexJsFileContents = prefix + "module.exports = require(" +  JSON.stringify(normalize(src)) + ");";
-
-    FileSystemUtilities.writeFile(destPackageJsonLocation, packageJsonFileContents, (err) => {
-      if (err) {
-        return callback(err);
-      }
-
-      FileSystemUtilities.writeFile(destIndexJsLocation, indexJsFileContents, callback);
-    });
+    FileSystemUtilities.symlink(src, dest, callback);
   }
 
   linkBinariesForPackage(pkg, callback) {
