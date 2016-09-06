@@ -40,14 +40,18 @@ export default class Command {
       return;
     }
 
+    let encounteredError = false;
     this.repository.directories.forEach((directory) => {
-      if (!FileSystemUtilities.existsSync(directory)) {
+      if (!encounteredError && !FileSystemUtilities.existsSync(directory)) {
         const baseName = path.basename(directory);
         this.logger.warning(`\`${baseName}/\` directory does not exist, have you run \`lerna init\`?`);
         this._complete(null, 1);
-        return;
+        encounteredError = true;
       }
     });
+    if (encounteredError) {
+      return;
+    }
 
     if (!FileSystemUtilities.existsSync(this.repository.packageJsonLocation)) {
       this.logger.warning("`package.json` does not exist, have you run `lerna init`?");
