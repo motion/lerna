@@ -5,6 +5,7 @@ import ExitHandler from "./ExitHandler";
 import progressBar from "./progressBar";
 import Repository from "./Repository";
 import logger from "./logger";
+import path from "path";
 
 const DEFAULT_CONCURRENCY = 4;
 
@@ -39,11 +40,14 @@ export default class Command {
       return;
     }
 
-    if (!FileSystemUtilities.existsSync(this.repository.packagesLocation)) {
-      this.logger.warning("`packages/` directory does not exist, have you run `lerna init`?");
-      this._complete(null, 1);
-      return;
-    }
+    this.repository.packagesDirectories.forEach((directory) => {
+      if (!FileSystemUtilities.existsSync(directory)) {
+        const baseName = path.basename(directory);
+        this.logger.warning(`\`${baseName}/\` directory does not exist, have you run \`lerna init\`?`);
+        this._complete(null, 1);
+        return;
+      }
+    });
 
     if (!FileSystemUtilities.existsSync(this.repository.packageJsonLocation)) {
       this.logger.warning("`package.json` does not exist, have you run `lerna init`?");
@@ -101,7 +105,7 @@ export default class Command {
 
   runPreparations() {
     try {
-      this.packages = PackageUtilities.getPackages(this.repository.packagesLocation);
+      this.packages = PackageUtilities.getPackages(this.repository.packagesDirectories);
       this.packageGraph = PackageUtilities.getPackageGraph(this.packages);
     } catch (err) {
       this.logger.error("Errored while collecting packages and package graph", err);

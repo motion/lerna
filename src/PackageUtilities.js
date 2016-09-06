@@ -27,25 +27,27 @@ export default class PackageUtilities {
     return require(PackageUtilities.getPackageConfigPath(packagesPath, name));
   }
 
-  static getPackages(packagesPath) {
+  static getPackages(packagesDirectories) {
     const packages = [];
 
-    FileSystemUtilities.readdirSync(packagesPath).forEach((packageDirectory) => {
-      if (packageDirectory[0] === ".") {
-        return;
-      }
+    packagesDirectories.forEach((packagesDirectory) => {
+      FileSystemUtilities.readdirSync(packagesDirectory).forEach((packageDirectory) => {
+        if (packageDirectory[0] === ".") {
+          return;
+        }
 
-      const packagePath = PackageUtilities.getPackagePath(packagesPath, packageDirectory);
-      const packageConfigPath = PackageUtilities.getPackageConfigPath(packagesPath, packageDirectory);
+        const packagePath = PackageUtilities.getPackagePath(packagesDirectory, packageDirectory);
+        const packageConfigPath = PackageUtilities.getPackageConfigPath(packagesDirectory, packageDirectory);
 
-      if (!FileSystemUtilities.existsSync(packageConfigPath)) {
-        return;
-      }
+        if (!FileSystemUtilities.existsSync(packageConfigPath)) {
+          return;
+        }
 
-      const packageJson = require(packageConfigPath);
-      const pkg = new Package(packageJson, packagePath);
+        const packageJson = require(packageConfigPath);
+        const pkg = new Package(packageJson, packagePath);
 
-      packages.push(pkg);
+        packages.push(pkg);
+      });
     });
 
     return packages;
