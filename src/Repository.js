@@ -46,8 +46,8 @@ export default class Repository {
     return this.lernaJson && this.lernaJson.bootstrapConfig || {};
   }
 
-  get packagesDirectories() {
-    const directories = this.lernaJson && this.lernaJson.packagesDirectories || ["packages"];
+  get directories() {
+    const directories = this.lernaJson && this.lernaJson.directories || ["packages"];
     return directories.map((directory) =>
       path.join(this.rootPath, directory)
     );

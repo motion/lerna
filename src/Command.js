@@ -40,7 +40,7 @@ export default class Command {
       return;
     }
 
-    this.repository.packagesDirectories.forEach((directory) => {
+    this.repository.directories.forEach((directory) => {
       if (!FileSystemUtilities.existsSync(directory)) {
         const baseName = path.basename(directory);
         this.logger.warning(`\`${baseName}/\` directory does not exist, have you run \`lerna init\`?`);
@@ -105,7 +105,7 @@ export default class Command {
 
   runPreparations() {
     try {
-      this.packages = PackageUtilities.getPackages(this.repository.packagesDirectories);
+      this.packages = PackageUtilities.getPackages(this.repository.directories);
       this.packageGraph = PackageUtilities.getPackageGraph(this.packages);
     } catch (err) {
       this.logger.error("Errored while collecting packages and package graph", err);

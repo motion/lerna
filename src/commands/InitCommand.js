@@ -23,11 +23,10 @@ export default class InitCommand extends Command {
   }
 
   ensurePackagesDirectory() {
-    const packagesDirectories = this.repository.packagesDirectories;
-    packagesDirectories.forEach(function(packagesDirectory) {
-      if (!FileSystemUtilities.existsSync(packagesDirectory)) {
+    this.repository.directories.forEach(function(directory) {
+      if (!FileSystemUtilities.existsSync(directory)) {
         this.logger.info("Creating packages folder.");
-        FileSystemUtilities.mkdirSync(packagesDirectory);
+        FileSystemUtilities.mkdirSync(directory);
       }
     });
   }

@@ -27,17 +27,17 @@ export default class PackageUtilities {
     return require(PackageUtilities.getPackageConfigPath(packagesPath, name));
   }
 
-  static getPackages(packagesDirectories) {
+  static getPackages(directories) {
     const packages = [];
 
-    packagesDirectories.forEach((packagesDirectory) => {
-      FileSystemUtilities.readdirSync(packagesDirectory).forEach((packageDirectory) => {
+    directories.forEach((directory) => {
+      FileSystemUtilities.readdirSync(directory).forEach((packageDirectory) => {
         if (packageDirectory[0] === ".") {
           return;
         }
 
-        const packagePath = PackageUtilities.getPackagePath(packagesDirectory, packageDirectory);
-        const packageConfigPath = PackageUtilities.getPackageConfigPath(packagesDirectory, packageDirectory);
+        const packagePath = PackageUtilities.getPackagePath(directory, packageDirectory);
+        const packageConfigPath = PackageUtilities.getPackageConfigPath(directory, packageDirectory);
 
         if (!FileSystemUtilities.existsSync(packageConfigPath)) {
           return;
