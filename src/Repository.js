@@ -13,7 +13,6 @@ export default class Repository {
     this.rootPath = GitUtilities.getTopLevelDirectory();
     this.lernaJsonLocation = path.join(this.rootPath, "lerna.json");
     this.packageJsonLocation = path.join(this.rootPath, "package.json");
-    this.packagesLocation = path.join(this.rootPath, "packages");
 
     // Legacy
     this.versionLocation = path.join(this.rootPath, "VERSION");
@@ -45,6 +44,13 @@ export default class Repository {
 
   get bootstrapConfig() {
     return this.lernaJson && this.lernaJson.bootstrapConfig || {};
+  }
+
+  get directories() {
+    const directories = this.lernaJson && this.lernaJson.directories || ["packages"];
+    return directories.map((directory) =>
+      path.join(this.rootPath, directory)
+    );
   }
 
   isIndependent() {

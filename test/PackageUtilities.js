@@ -49,7 +49,7 @@ describe("PackageUtilities", () => {
   describe(".getPackages()", () => {
     it("should collect all the packages from the given packages directory", () => {
       const fixture = path.join(__dirname, "fixtures/PackageUtilities/basic/packages");
-      const result = PackageUtilities.getPackages(fixture);
+      const result = PackageUtilities.getPackages([fixture]);
 
       assert.equal(result.length, 4);
       assert(result[0] instanceof Package);
@@ -61,7 +61,7 @@ describe("PackageUtilities", () => {
 
   describe(".filterPackages()", () => {
     const fixture = path.join(__dirname, "fixtures/PackageUtilities/filtering/packages");
-    const packages = PackageUtilities.getPackages(fixture);
+    const packages = PackageUtilities.getPackages([fixture]);
 
     it("should throw when --scope is given but empty", () => {
       assert.throws(() => {
