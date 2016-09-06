@@ -56,7 +56,7 @@ export default class FileSystemUtilities {
     fs.lstat(dest, (err) => {
       if (!err) {
         // Something exists at `dest`.  Need to remove it first.
-        fs.unlink(dest, () => fs.symlink(src, dest, callback));
+        rimraf(dest, () => fs.symlink(src, dest, callback));
       } else {
         fs.symlink(src, dest, callback);
       }
