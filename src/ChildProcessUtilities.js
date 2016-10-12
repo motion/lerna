@@ -63,17 +63,6 @@ export default class ChildProcessUtilities {
     }
   }
 
-  static spawnSync(command, args, opts) {
-    const output = child.spawnSync(command, args, opts);
-    if (output.error) {
-      throw new Error(output.error.toString());
-    }
-    if (output.status) {
-      throw new Error(`Command failed: ${command} ${args.join(" ")}`);
-    }
-    return output;
-  }
-
   static registerChild(child) {
     children++;
     child.on("exit", () => {
