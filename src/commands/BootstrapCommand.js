@@ -183,10 +183,9 @@ export default class BootstrapCommand extends Command {
       });
 
     if (externalPackages.length) {
-      NpmUtilities.installInDir(pkg.location, externalPackages, callback);
-    } else {
-      callback();
+      NpmUtilities.installInDir(pkg.location, externalPackages);
     }
+    callback();
   }
 
   hasMatchingDependency(pkg, dependency, showWarning = false) {
